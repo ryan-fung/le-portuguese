@@ -1,0 +1,26 @@
+@import 'tailwindcss';
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: #0f172a;
+  color: #e2e8f0;
+  font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+/* IPA glyphs render inconsistently across platforms; this stack keeps them legible. */
+.ipa {
+  font-family: 'Gentium Plus', 'Doulos SIL', 'Charis SIL', 'Lucida Sans Unicode', 'Segoe UI', serif;
+  font-feature-settings: 'kern' 1;
+}
