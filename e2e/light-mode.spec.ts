@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test'
 
 test.describe('Light Mode', () => {
   test('should render light mode correctly', async ({ page }) => {
-    await page.goto('http://localhost:5173')
+    await page.goto('/')
 
     // Dismiss the voice quality banner if present
     const banner = page.locator('.voice-quality-banner')
