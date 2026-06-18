@@ -145,6 +145,184 @@ body {
   color: #d97706;
 }
 
+/* Additional theme utilities for component styling */
+.theme-bg-slate-900-40 {
+  background-color: rgb(15 23 42 / 0.4);
+}
+
+:root.light .theme-bg-slate-900-40 {
+  background-color: #ffffff;
+}
+
+.theme-bg-slate-900-60 {
+  background-color: rgb(15 23 42 / 0.6);
+}
+
+:root.light .theme-bg-slate-900-60 {
+  background-color: #ffffff;
+}
+
+.theme-bg-slate-900-30 {
+  background-color: rgb(15 23 42 / 0.3);
+}
+
+:root.light .theme-bg-slate-900-30 {
+  background-color: #ffffff;
+}
+
+.theme-border-slate-700 {
+  border-color: #475569;
+}
+
+:root.light .theme-border-slate-700 {
+  border-color: #e2e8f0;
+}
+
+.theme-border-slate-800 {
+  border-color: #334155;
+}
+
+:root.light .theme-border-slate-800 {
+  border-color: #e2e8f0;
+}
+
+.theme-text-slate-500 {
+  color: #64748b;
+}
+
+:root.light .theme-text-slate-500 {
+  color: #94a3b8;
+}
+
+.theme-text-slate-600 {
+  color: #475569;
+}
+
+:root.light .theme-text-slate-600 {
+  color: #64748b;
+}
+
+.theme-placeholder-slate-600::placeholder {
+  color: #475569;
+}
+
+:root.light .theme-placeholder-slate-600::placeholder {
+  color: #94a3b8;
+}
+
+.theme-bg-slate-700 {
+  background-color: #475569;
+}
+
+:root.light .theme-bg-slate-700 {
+  background-color: #e2e8f0;
+}
+
+.theme-bg-slate-800 {
+  background-color: #1e293b;
+}
+
+:root.light .theme-bg-slate-800 {
+  background-color: #f1f5f9;
+}
+
+.theme-bg-slate-900 {
+  background-color: #0f172a;
+}
+
+:root.light .theme-bg-slate-900 {
+  background-color: #ffffff;
+}
+
+.theme-bg-amber-400-5 {
+  background-color: rgb(251 191 36 / 0.05);
+}
+
+:root.light .theme-bg-amber-400-5 {
+  background-color: rgb(254 243 199);
+}
+
+.theme-border-amber-400-20 {
+  border-color: rgb(251 191 36 / 0.2);
+}
+
+:root.light .theme-border-amber-400-20 {
+  border-color: rgb(251 191 36 / 0.4);
+}
+
+.theme-text-amber-200-90 {
+  color: rgb(253 230 138 / 0.9);
+}
+
+:root.light .theme-text-amber-200-90 {
+  color: rgb(180 83 9);
+}
+
+.theme-bg-amber-400-15 {
+  background-color: rgb(251 191 36 / 0.15);
+}
+
+:root.light .theme-bg-amber-400-15 {
+  background-color: rgb(255 251 235);
+}
+
+.theme-text-amber-300 {
+  color: #fcd34d;
+}
+
+:root.light .theme-text-amber-300 {
+  color: #d97706;
+}
+
+.theme-ring-amber-400-30 {
+  --tw-ring-color: rgb(251 191 36 / 0.3);
+}
+
+:root.light .theme-ring-amber-400-30 {
+  --tw-ring-color: rgb(251 191 36 / 0.5);
+}
+
+.theme-text-slate-200 {
+  color: #e2e8f0;
+}
+
+:root.light .theme-text-slate-200 {
+  color: #0f172a;
+}
+
+.theme-text-slate-300 {
+  color: #cbd5e1;
+}
+
+:root.light .theme-text-slate-300 {
+  color: #334155;
+}
+
+.theme-text-slate-300 {
+  color: #cbd5e1;
+}
+
+:root.light .theme-text-slate-300 {
+  color: #334155;
+}
+
+.theme-text-slate-200 {
+  color: #e2e8f0;
+}
+
+:root.light .theme-text-slate-200 {
+  color: #0f172a;
+}
+
+/* Placeholder variants */
+.theme-placeholder-slate-600::placeholder {
+  color: #475569;
+}
+
+:root.light .theme-placeholder-slate-600::placeholder {
+  color: #94a3b8;
+}
+
 /* Segment tile theme variants */
 .segment-vowel {
   background-color: rgb(16 185 129 / 0.15);

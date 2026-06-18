@@ -44,13 +44,17 @@ export function ReaderView() {
   const [selectedPhoneme, setSelectedPhoneme] = useState<string | null>(null)
   const [speaking, setSpeaking] = useState(false)
   const [capability, setCapability] = useState<SpeechCapability | null>(null)
+  const [voiceName, setVoiceName] = useState<string | undefined>(undefined)
 
   const { playOne, playSequence, stop: stopClips } = usePhonemeAudio()
 
   useEffect(() => {
     let active = true
     getSpeechCapability().then((cap) => {
-      if (active) setCapability(cap)
+      if (active) {
+        setCapability(cap)
+        setVoiceName(cap.voiceName)
+      }
     })
     return () => {
       active = false
@@ -144,6 +148,7 @@ export function ReaderView() {
             speaking={speaking}
             onReadPassage={handleReadPassage}
             onStop={handleStop}
+            voiceName={voiceName}
           />
           <Legend />
           <Results
@@ -172,10 +177,10 @@ export function ReaderView() {
 function Header() {
   return (
     <header className="flex flex-col gap-1">
-      <h1 className="flex items-center gap-2 text-2xl font-bold text-slate-100">
-        <Sparkles className="text-amber-400" size={22} /> Reader
+      <h1 className="flex items-center gap-2 text-2xl font-bold theme-text-primary">
+        <Sparkles className="theme-text-accent" size={22} /> Reader
       </h1>
-      <p className="text-sm text-slate-400">
+      <p className="text-sm theme-text-secondary">
         Paste any Portuguese text and see exactly how to say it — sound by sound, the European way.
       </p>
     </header>
@@ -201,7 +206,7 @@ function Composer({
         placeholder="Escreve ou cola texto em português…"
         rows={3}
         aria-label="Portuguese text to read"
-        className="w-full resize-y rounded-xl border border-slate-700 bg-slate-900/60 p-4 text-base text-slate-100 placeholder:text-slate-600 focus:border-amber-400/50 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
+        className="w-full resize-y rounded-xl border theme-border-slate-700 theme-bg-slate-900-60 p-4 text-base theme-text-primary theme-placeholder-slate-600 focus:border-amber-400/50 focus:outline-none focus:ring-2 focus:ring-amber-400/30"
       />
       <div className="flex flex-wrap items-center gap-2">
         <button
@@ -216,7 +221,7 @@ function Composer({
           <button
             type="button"
             onClick={() => onDraftChange('')}
-            className="rounded-lg px-3 py-2 text-sm text-slate-400 transition hover:text-slate-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+            className="rounded-lg px-3 py-2 text-sm theme-text-secondary transition hover:theme-text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
           >
             Clear
           </button>
@@ -225,7 +230,7 @@ function Composer({
 
       {recentTexts.length > 0 && (
         <div className="flex flex-col gap-1.5">
-          <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-500">
+          <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide theme-text-muted">
             <Clock size={12} /> Recent
           </span>
           <div className="flex flex-wrap gap-2">
@@ -237,7 +242,7 @@ function Composer({
                   onDraftChange(t)
                   onRead(t)
                 }}
-                className="max-w-[16rem] truncate rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1 text-xs text-slate-300 transition hover:border-amber-400/40 hover:text-amber-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+                className="max-w-[16rem] truncate rounded-full border theme-border-slate-700 theme-bg-slate-900-60 px-3 py-1 text-xs theme-text-slate-300 transition hover:border-amber-400/40 hover:text-amber-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
                 title={t}
               >
                 {t}
@@ -252,7 +257,7 @@ function Composer({
 
 function SpeechBanner({ voiceName }: { voiceName?: string }) {
   return (
-    <div className="rounded-lg border border-amber-400/20 bg-amber-400/5 px-4 py-3 text-xs leading-relaxed text-amber-200/90">
+    <div className="rounded-lg border theme-border-amber-400-20 theme-bg-amber-400-5 px-4 py-3 text-xs leading-relaxed theme-text-amber-200-90">
       Your device has no European Portuguese voice
       {voiceName ? ` (it will use "${voiceName}")` : ''}, so spoken playback may sound Brazilian. The
       sound-by-sound breakdown below is still accurate European Portuguese.
@@ -271,6 +276,7 @@ function Controls({
   speaking,
   onReadPassage,
   onStop,
+  voiceName,
 }: {
   showIpa: boolean
   showRespelling: boolean
@@ -282,51 +288,60 @@ function Controls({
   speaking: boolean
   onReadPassage: () => void
   onStop: () => void
+  voiceName?: string
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border border-slate-800 bg-slate-900/40 p-3">
-      {canSpeak && (
-        <div className="flex items-center gap-2">
-          {speaking ? (
-            <button
-              type="button"
-              onClick={onStop}
-              aria-label="Stop reading"
-              className="flex items-center gap-2 rounded-lg bg-slate-700 px-3 py-2 text-sm font-medium text-slate-100 transition hover:bg-slate-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
-            >
-              <Square size={15} /> Stop
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onReadPassage}
-              aria-label="Read the whole passage aloud"
-              className="flex items-center gap-2 rounded-lg bg-amber-400/15 px-3 py-2 text-sm font-medium text-amber-300 ring-1 ring-amber-400/30 transition hover:bg-amber-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
-            >
-              <Play size={15} /> Read aloud
-            </button>
-          )}
+    <div className="flex flex-col gap-2">
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-xl border theme-border-slate-800 theme-bg-slate-900-40 p-3">
+        {canSpeak && (
+          <div className="flex items-center gap-2">
+            {speaking ? (
+              <button
+                type="button"
+                onClick={onStop}
+                aria-label="Stop reading"
+                className="flex items-center gap-2 rounded-lg theme-bg-slate-700 px-3 py-2 text-sm font-medium theme-text-primary transition hover:theme-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+              >
+                <Square size={15} /> Stop
+              </button>
+            ) : (
+              <button
+                type="button"
+                onClick={onReadPassage}
+                aria-label="Read the whole passage aloud"
+                className="flex items-center gap-2 rounded-lg theme-bg-amber-400-15 px-3 py-2 text-sm font-medium theme-text-amber-300 ring-1 ring-amber-400/30 transition hover:bg-amber-400/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+              >
+                <Play size={15} /> Read aloud
+              </button>
+            )}
+          </div>
+        )}
+
+        <Toggle label="IPA" checked={showIpa} onChange={onToggleIpa} />
+        <Toggle label="Respelling" checked={showRespelling} onChange={onToggleRespelling} />
+
+        {canSpeak && (
+          <label className="ml-auto flex items-center gap-2 text-xs theme-text-secondary">
+            Speed
+            <input
+              type="range"
+              min={0.5}
+              max={1.1}
+              step={0.05}
+              value={speechRate}
+              onChange={(e) => onRateChange(Number(e.target.value))}
+              aria-label="Speech speed"
+              className="h-1 w-24 cursor-pointer accent-amber-400"
+            />
+            <span className="w-8 tabular-nums theme-text-muted">{speechRate.toFixed(2)}×</span>
+          </label>
+        )}
+      </div>
+
+      {canSpeak && voiceName && (
+        <div className="text-xs theme-text-muted">
+          Using: {voiceName}
         </div>
-      )}
-
-      <Toggle label="IPA" checked={showIpa} onChange={onToggleIpa} />
-      <Toggle label="Respelling" checked={showRespelling} onChange={onToggleRespelling} />
-
-      {canSpeak && (
-        <label className="ml-auto flex items-center gap-2 text-xs text-slate-400">
-          Speed
-          <input
-            type="range"
-            min={0.5}
-            max={1.1}
-            step={0.05}
-            value={speechRate}
-            onChange={(e) => onRateChange(Number(e.target.value))}
-            aria-label="Speech speed"
-            className="h-1 w-24 cursor-pointer accent-amber-400"
-          />
-          <span className="w-8 tabular-nums text-slate-500">{speechRate.toFixed(2)}×</span>
-        </label>
       )}
     </div>
   )
@@ -347,11 +362,11 @@ function Toggle({
       role="switch"
       aria-checked={checked}
       onClick={onChange}
-      className="flex items-center gap-2 text-sm text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+      className="flex items-center gap-2 text-sm theme-text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
     >
       <span
         className={`flex h-5 w-9 items-center rounded-full p-0.5 transition ${
-          checked ? 'bg-amber-400' : 'bg-slate-700'
+          checked ? 'bg-amber-400' : 'theme-bg-slate-700'
         }`}
       >
         <span
@@ -390,7 +405,7 @@ function Results({
           }
           // Punctuation / numbers / symbols: render verbatim, non-interactive.
           return (
-            <span key={i} className="self-center text-lg text-slate-500">
+            <span key={i} className="self-center text-lg theme-text-muted">
               {rt.token.text}
             </span>
           )
@@ -399,7 +414,7 @@ function Results({
         // A word with no resolvable sounds (e.g. all silent / unknown): show plain.
         if (!analysis || analysis.syllables.length === 0) {
           return (
-            <span key={i} className="self-center text-lg text-slate-400">
+            <span key={i} className="self-center text-lg theme-text-secondary">
               {rt.token.text}
             </span>
           )
@@ -429,11 +444,11 @@ function EmptyState({ onLoadExample }: { onLoadExample: (text: string) => void }
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
-      className="flex flex-col gap-5 rounded-2xl border border-slate-800 bg-slate-900/30 p-6"
+      className="flex flex-col gap-5 rounded-2xl border theme-border-slate-800 theme-bg-slate-900-30 p-6"
     >
       <div className="flex flex-col gap-2">
-        <h2 className="text-base font-semibold text-slate-200">Start with an example</h2>
-        <p className="text-sm leading-relaxed text-slate-400">
+        <h2 className="text-base font-semibold theme-text-slate-200">Start with an example</h2>
+        <p className="text-sm leading-relaxed theme-text-secondary">
           Tap a passage to break it into colour-coded sounds. Each tile shows the letters, the IPA,
           and an English respelling so you can sound out any word — even one you have never seen.
         </p>
@@ -444,13 +459,13 @@ function EmptyState({ onLoadExample }: { onLoadExample: (text: string) => void }
             key={ex.label}
             type="button"
             onClick={() => onLoadExample(ex.text)}
-            className="flex flex-col gap-1 rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-left transition hover:border-amber-400/40 hover:bg-slate-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+            className="flex flex-col gap-1 rounded-xl border theme-border-slate-800 theme-bg-card p-4 text-left transition hover:border-amber-400/40 hover:theme-bg-hover focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
           >
             <span className="text-[11px] font-semibold uppercase tracking-wide text-amber-400/80">
               {ex.label}
             </span>
-            <span className="text-sm font-medium text-slate-100">{ex.text}</span>
-            <span className="text-xs text-slate-500">{ex.gloss}</span>
+            <span className="text-sm font-medium theme-text-primary">{ex.text}</span>
+            <span className="text-xs theme-text-muted">{ex.gloss}</span>
           </button>
         ))}
       </div>

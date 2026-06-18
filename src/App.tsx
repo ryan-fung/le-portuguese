@@ -1,5 +1,6 @@
 import { lazy, Suspense, useEffect } from 'react'
 import { Nav } from '@/components/Nav'
+import { ThemeToggle } from '@/components/ThemeToggle'
 import { VoiceQualityBanner } from '@/components/VoiceQualityBanner'
 import { useStore } from '@/store'
 import '@/components/VoiceQualityBanner.css'
@@ -26,13 +27,18 @@ export function App() {
     <div className="flex h-full">
       <VoiceQualityBanner />
       <Nav />
-      <main className="flex-1 overflow-y-auto pb-20 sm:pb-0">
-        <Suspense fallback={<div className="p-8 text-slate-500">Loading…</div>}>
-          {route === 'reader' && <ReaderView />}
-          {route === 'lab' && <LabView />}
-          {route === 'drills' && <DrillsView />}
-          {route === 'learn' && <LearnView />}
-        </Suspense>
+      <main className="flex flex-1 flex-col overflow-y-auto pb-20 sm:pb-0">
+        <header className="sticky top-0 z-10 flex justify-end border-b theme-bg-nav px-4 py-2 sm:px-6">
+          <ThemeToggle />
+        </header>
+        <div className="flex-1">
+          <Suspense fallback={<div className="p-8 theme-text-muted">Loading…</div>}>
+            {route === 'reader' && <ReaderView />}
+            {route === 'lab' && <LabView />}
+            {route === 'drills' && <DrillsView />}
+            {route === 'learn' && <LearnView />}
+          </Suspense>
+        </div>
       </main>
     </div>
   )

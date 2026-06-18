@@ -1,4 +1,4 @@
-import { BookOpen, Headphones, Mic2, Moon, Sparkles, Sun } from 'lucide-react'
+import { BookOpen, Headphones, Mic2, Sparkles } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useStore, type RouteId } from '@/store'
 
@@ -18,8 +18,6 @@ const NAV: NavItem[] = [
 export function Nav() {
   const route = useStore((s) => s.route)
   const setRoute = useStore((s) => s.setRoute)
-  const theme = useStore((s) => s.theme)
-  const setTheme = useStore((s) => s.setTheme)
 
   return (
     <>
@@ -46,14 +44,6 @@ export function Nav() {
             </button>
           )
         })}
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium transition theme-nav-item-inactive"
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-        >
-          {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
-          {theme === 'dark' ? 'Light' : 'Dark'}
-        </button>
       </nav>
 
       {/* Mobile bottom nav */}
@@ -76,15 +66,6 @@ export function Nav() {
             </button>
           )
         })}
-        <button
-          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-          className="flex flex-1 flex-col items-center gap-1 py-2.5 text-[11px] font-medium transition theme-text-muted"
-          aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
-          style={{ paddingBottom: 'max(0.625rem, env(safe-area-inset-bottom))' }}
-        >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-          Theme
-        </button>
       </nav>
     </>
   )

@@ -34,25 +34,12 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
   })
 }
 
-function pickVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
-  const pt = voices.filter((v) => v.lang.toLowerCase().startsWith('pt'))
-  // Prefer European Portuguese, then any Portuguese.
-  return (
-    pt.find((v) => v.lang.toLowerCase() === 'pt-pt') ??
-    pt.find((v) => v.lang.toLowerCase().includes('pt')) ??
-    undefined
-  )
+function hasPortugueseVoice(voices: SpeechSynthesisVoice[]): boolean {
+  return voices.some((v) => v.lang.toLowerCase().startsWith('pt'))
 }
 
-function isHighQualityVoice(voice: SpeechSynthesisVoice | undefined): boolean {
-  if (!voice) return false
-  const name = voice.name.toLowerCase()
-  // Check for premium/enhanced voices on iOS/macOS (e.g., "Joana", "Catarina" premium)
-  // and exclude low-quality compact voices
-  return (
-    !name.includes('compact') &&
-    (voice.localService || name.includes('premium') || name.includes('enhanced'))
-  )
+function hasEuropeanPortugueseVoice(voices: SpeechSynthesisVoice[]): boolean {
+  return voices.some((v) => v.lang.toLowerCase() === 'pt-pt')
 }
 
 export async function getSpeechCapability(): Promise<SpeechCapability> {
@@ -60,20 +47,19 @@ export async function getSpeechCapability(): Promise<SpeechCapability> {
     return {
       supported: false,
       hasEuropeanVoice: false,
-      shouldPromptVoiceDownload: false
+      shouldPromptVoiceDownload: true
     }
   }
 
   const voices = await loadVoices()
-  const voice = pickVoice(voices)
-  const hasEPVoice = !!voice && voice.lang.toLowerCase() === 'pt-pt'
-  const isHighQuality = isHighQualityVoice(voice)
+  const hasEP = hasEuropeanPortugueseVoice(voices)
+  const hasPT = hasPortugueseVoice(voices)
 
   return {
-    supported: !!voice,
-    hasEuropeanVoice: hasEPVoice,
-    shouldPromptVoiceDownload: !hasEPVoice || !isHighQuality,
-    voiceName: voice?.name
+    supported: voices.length > 0,
+    hasEuropeanVoice: hasEP,
+    shouldPromptVoiceDownload: !hasEP,
+    voiceName: hasEP ? 'pt-PT (device default)' : hasPT ? 'pt-BR fallback' : undefined
   }
 }
 
@@ -91,12 +77,8 @@ export async function speak(text: string, opts: SpeakOptions = {}): Promise<void
   // Stop any currently playing speech
   stopSpeaking()
 
-  const voices = cachedVoices.length ? cachedVoices : await loadVoices()
-  const voice = pickVoice(voices)
-
   const utter = new SpeechSynthesisUtterance(text)
-  if (voice) utter.voice = voice
-  utter.lang = voice?.lang ?? 'pt-PT'
+  utter.lang = 'pt-PT'  // Let device use its configured pt-PT voice
   utter.rate = opts.rate ?? 0.85
   utter.pitch = opts.pitch ?? 1
 

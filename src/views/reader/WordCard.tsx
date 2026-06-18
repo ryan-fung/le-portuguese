@@ -36,7 +36,7 @@ export function WordCard({
 }: WordCardProps) {
   return (
     <motion.span
-      className="inline-flex flex-col gap-1.5 rounded-xl bg-slate-900/40 p-2 align-top"
+      className="inline-flex flex-col gap-1.5 rounded-xl theme-bg-slate-900-40 p-2 align-top"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25, delay: Math.min(index * 0.015, 0.4) }}
@@ -54,7 +54,7 @@ export function WordCard({
       </span>
 
       <span className="flex items-center justify-between gap-2 px-0.5">
-        <span className="ipa text-xs text-slate-500" aria-hidden={!analysis.ipa}>
+        <span className="ipa text-xs theme-text-slate-500" aria-hidden={!analysis.ipa}>
           {analysis.ipa && `/${analysis.ipa}/`}
         </span>
         <span className="flex gap-1">
@@ -63,7 +63,7 @@ export function WordCard({
               type="button"
               onClick={() => onSpeakWord(analysis.input)}
               aria-label={`Speak the word ${analysis.input}`}
-              className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+              className="rounded-md p-1.5 theme-text-secondary transition hover:theme-bg-slate-800 hover:text-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
             >
               <Volume2 size={14} />
             </button>
@@ -72,7 +72,7 @@ export function WordCard({
             type="button"
             onClick={() => onPlaySounds(analysis)}
             aria-label={`Play ${analysis.input} sound by sound`}
-            className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+            className="rounded-md p-1.5 theme-text-secondary transition hover:theme-bg-slate-800 hover:text-amber-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
           >
             <ListMusic size={14} />
           </button>
@@ -136,7 +136,7 @@ function SegmentTile({
             <span className="ipa text-[11px] opacity-90">{ipaFor(segment)}</span>
           )}
           {showRespelling && segment.respelling && (
-            <span className="text-[10px] text-slate-400">{segment.respelling}</span>
+            <span className="text-[10px] theme-text-secondary">{segment.respelling}</span>
           )}
         </span>
       )}

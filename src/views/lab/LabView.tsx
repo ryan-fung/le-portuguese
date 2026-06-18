@@ -61,20 +61,20 @@ export function LabView() {
       <header className="mb-5">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h1 className="flex items-center gap-2 text-2xl font-bold text-slate-100">
-              <Sparkles size={22} className="text-amber-400" />
+            <h1 className="flex items-center gap-2 text-2xl font-bold theme-text-primary">
+              <Sparkles size={22} className="theme-text-accent" />
               Sound Lab
             </h1>
-            <p className="mt-1 text-sm text-slate-400">
+            <p className="mt-1 text-sm theme-text-secondary">
               Every European Portuguese sound, explained in plain English.
             </p>
           </div>
           <div className="text-right">
-            <div className="text-sm font-medium text-amber-300">
+            <div className="text-sm font-medium theme-text-amber-300">
               {exploredCount} / {total} explored
             </div>
             <div
-              className="mt-1 h-1.5 w-32 overflow-hidden rounded-full bg-slate-800"
+              className="mt-1 h-1.5 w-32 overflow-hidden rounded-full theme-bg-slate-800"
               role="progressbar"
               aria-valuemin={0}
               aria-valuemax={total}
@@ -96,7 +96,7 @@ export function LabView() {
       <div className="relative mb-3">
         <Search
           size={16}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
+          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 theme-text-muted"
         />
         <input
           type="search"
@@ -104,7 +104,7 @@ export function LabView() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search a sound, name or English hint…"
           aria-label="Search sounds"
-          className="w-full rounded-xl border border-slate-700 bg-slate-900 py-2.5 pl-9 pr-3 text-sm text-slate-100 placeholder:text-slate-500 focus:border-amber-400/60 focus:outline-none focus:ring-1 focus:ring-amber-400/60"
+          className="w-full rounded-xl border theme-border-slate-700 theme-bg-slate-900 py-2.5 pl-9 pr-3 text-sm theme-text-primary placeholder:theme-text-muted focus:border-amber-400/60 focus:outline-none focus:ring-1 focus:ring-amber-400/60"
         />
       </div>
 
@@ -123,12 +123,12 @@ export function LabView() {
               aria-pressed={active}
               className={`rounded-full px-3 py-1.5 text-xs font-medium ring-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
                 active
-                  ? 'bg-amber-400/15 text-amber-200 ring-amber-400/50'
-                  : 'bg-slate-900 text-slate-400 ring-slate-700 hover:text-slate-200 hover:ring-slate-600'
+                  ? 'theme-bg-amber-400-15 theme-text-amber-300 ring-amber-400/50'
+                  : 'theme-bg-slate-900 theme-text-secondary ring-slate-700 hover:theme-text-slate-200 hover:ring-slate-600'
               }`}
             >
               {c.short}
-              <span className="ml-1.5 text-slate-500">{count}</span>
+              <span className="ml-1.5 theme-text-muted">{count}</span>
             </button>
           )
         })}
@@ -141,8 +141,8 @@ export function LabView() {
           aria-pressed={signatureOnly}
           className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium ring-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
             signatureOnly
-              ? 'bg-amber-400/15 text-amber-200 ring-amber-400/50'
-              : 'bg-slate-900 text-slate-400 ring-slate-700 hover:text-slate-200 hover:ring-slate-600'
+              ? 'theme-bg-amber-400-15 theme-text-amber-300 ring-amber-400/50'
+              : 'theme-bg-slate-900 theme-text-secondary ring-slate-700 hover:theme-text-slate-200 hover:ring-slate-600'
           }`}
         >
           <Star size={13} fill={signatureOnly ? 'currentColor' : 'none'} />
@@ -153,21 +153,21 @@ export function LabView() {
           aria-pressed={unseenOnly}
           className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium ring-1 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-400 ${
             unseenOnly
-              ? 'bg-amber-400/15 text-amber-200 ring-amber-400/50'
-              : 'bg-slate-900 text-slate-400 ring-slate-700 hover:text-slate-200 hover:ring-slate-600'
+              ? 'theme-bg-amber-400-15 theme-text-amber-300 ring-amber-400/50'
+              : 'theme-bg-slate-900 theme-text-secondary ring-slate-700 hover:theme-text-slate-200 hover:ring-slate-600'
           }`}
         >
           <Eye size={13} />
           Not yet seen
         </button>
-        <span className="flex items-center px-1 text-xs text-slate-500">
+        <span className="flex items-center px-1 text-xs theme-text-muted">
           {filtered.length} {filtered.length === 1 ? 'sound' : 'sounds'}
         </span>
       </div>
 
       {/* Grid */}
       {groups.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-700 py-16 text-center text-sm text-slate-500">
+        <div className="rounded-2xl border border-dashed theme-border-slate-700 py-16 text-center text-sm theme-text-muted">
           No sounds match these filters.
         </div>
       ) : (
@@ -178,7 +178,7 @@ export function LabView() {
                 className={`mb-3 text-xs font-semibold uppercase tracking-wider ${group.accent}`}
               >
                 {group.title}
-                <span className="ml-2 text-slate-600">{group.phonemes.length}</span>
+                <span className="ml-2 theme-text-muted">{group.phonemes.length}</span>
               </h2>
               <motion.div
                 layout
