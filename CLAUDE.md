@@ -65,7 +65,7 @@ src/
 │   ├── phonemes.ts           # Full phoneme inventory with teaching content
 │   └── curriculum.ts         # 8-lesson curriculum with drills
 ├── lib/
-│   ├── speech.ts             # Web Speech API wrapper (pt-PT TTS)
+│   ├── speech.ts             # TTS via Web Speech API (pt-PT) with voice quality detection
 │   ├── usePhonemeAudio.ts    # Phoneme audio playback hook
 │   ├── srs.ts                # ts-fsrs wrapper
 │   ├── segmentStyle.ts       # Color coding for segment tiles
@@ -77,7 +77,9 @@ src/
 │   ├── DrillsView.tsx
 │   └── LearnView.tsx
 ├── components/
-│   └── Nav.tsx               # Bottom nav (mobile) / sidebar (desktop)
+│   ├── Nav.tsx               # Bottom nav (mobile) / sidebar (desktop)
+│   ├── VoiceQualityBanner.tsx # Dismissible banner prompting iOS/macOS users to download enhanced voice
+│   └── VoiceQualityBanner.css # Slide-down banner styling
 ├── store.ts                  # Zustand store with persist (progress, SRS, prefs)
 └── App.tsx                   # Route orchestration + lazy loading
 ```
@@ -110,8 +112,12 @@ The engine emits only phoneme IDs that exist in the canonical registry (`src/cor
 
 ### Audio
 - **Phoneme clips**: bundled MP3s under `public/audio/<id>.mp3` (one per phoneme)
-- **Word/passage TTS**: Web Speech API with `lang=pt-PT`, rate 0.85
-- Graceful degradation: if no pt-PT voice exists, the app shows a banner noting the device may use a Brazilian accent, but the per-sound breakdown remains accurate.
+- **Word/passage TTS**: Web Speech API with pt-PT voice
+  - Uses the browser's native Portuguese (Portugal) voice
+  - On iOS/macOS, the app prompts users to download the high-quality Siri enhanced voice if not detected
+  - Voice quality detection logic in `src/lib/speech.ts` checks for premium/enhanced pt-PT voices
+  - A dismissible banner (`VoiceQualityBanner` component) guides users to Settings → Accessibility → Spoken Content → Voices
+  - Banner appears once per session (stored in sessionStorage)
 
 ---
 
@@ -202,7 +208,7 @@ Run: `npm run test:e2e`
 
 ### Audio
 - Phoneme clips are sourced from public-domain recordings or generated as placeholders (see workflow output).
-- TTS depends on device voices; not all devices ship a pt-PT voice.
+- TTS depends on device voices. On iOS/macOS, users need to manually download the enhanced Portuguese (Portugal) voice for best quality. The app prompts users when a high-quality voice is not detected.
 
 ### No cloud sync
 - Progress (SRS cards, completed lessons, seen phonemes) is localStorage-only. No user accounts.

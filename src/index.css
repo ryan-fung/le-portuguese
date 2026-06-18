@@ -4,6 +4,10 @@
   color-scheme: dark;
 }
 
+:root.light {
+  color-scheme: light;
+}
+
 html,
 body,
 #root {
@@ -13,14 +17,205 @@ body,
 body {
   margin: 0;
   background-color: #0f172a;
-  color: #e2e8f0;
+  color: #f1f5f9;
   font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   overscroll-behavior: none;
+}
+
+:root.light body {
+  background-color: #fafafa;
+  color: #0f172a;
 }
 
 /* IPA glyphs render inconsistently across platforms; this stack keeps them legible. */
 .ipa {
   font-family: 'Gentium Plus', 'Doulos SIL', 'Charis SIL', 'Lucida Sans Unicode', 'Segoe UI', serif;
   font-feature-settings: 'kern' 1;
+}
+
+/* Theme-aware utilities */
+.theme-bg-nav {
+  background-color: rgb(15 23 42 / 0.6);
+  border-color: #334155;
+}
+
+:root.light .theme-bg-nav {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.theme-bg-nav-mobile {
+  background-color: rgb(15 23 42 / 0.95);
+  border-color: #334155;
+}
+
+:root.light .theme-bg-nav-mobile {
+  background-color: rgb(255 255 255 / 0.95);
+  border-color: #e2e8f0;
+}
+
+.theme-text-primary {
+  color: #f1f5f9;
+}
+
+:root.light .theme-text-primary {
+  color: #0f172a;
+}
+
+.theme-text-secondary {
+  color: #94a3b8;
+}
+
+:root.light .theme-text-secondary {
+  color: #475569;
+}
+
+.theme-text-muted {
+  color: #64748b;
+}
+
+:root.light .theme-text-muted {
+  color: #64748b;
+}
+
+.theme-text-accent {
+  color: #fbbf24;
+}
+
+:root.light .theme-text-accent {
+  color: #f59e0b;
+}
+
+.theme-bg-input {
+  background-color: rgb(15 23 42 / 0.6);
+  border-color: #475569;
+  color: #f1f5f9;
+}
+
+:root.light .theme-bg-input {
+  background-color: #ffffff;
+  border-color: #cbd5e1;
+  color: #0f172a;
+}
+
+.theme-bg-card {
+  background-color: rgb(15 23 42 / 0.4);
+  border-color: #334155;
+}
+
+:root.light .theme-bg-card {
+  background-color: #ffffff;
+  border-color: #e2e8f0;
+}
+
+.theme-bg-hover {
+  background-color: #1e293b;
+}
+
+:root.light .theme-bg-hover {
+  background-color: #f1f5f9;
+}
+
+.theme-nav-item-inactive {
+  color: #94a3b8;
+}
+
+:root.light .theme-nav-item-inactive {
+  color: #475569;
+}
+
+.theme-nav-item-inactive:hover {
+  background-color: #1e293b;
+  color: #e2e8f0;
+}
+
+:root.light .theme-nav-item-inactive:hover {
+  background-color: #f1f5f9;
+  color: #0f172a;
+}
+
+.theme-nav-item-active {
+  background-color: rgb(251 191 36 / 0.15);
+  color: #fcd34d;
+}
+
+:root.light .theme-nav-item-active {
+  background-color: rgb(255 251 235);
+  color: #d97706;
+}
+
+/* Segment tile theme variants */
+.segment-vowel {
+  background-color: rgb(16 185 129 / 0.15);
+  color: rgb(167 243 208);
+  border: 1px solid rgb(52 211 153 / 0.3);
+}
+
+:root.light .segment-vowel {
+  background-color: rgb(209 250 229);
+  color: rgb(4 120 87);
+  border: 1px solid rgb(52 211 153 / 0.5);
+}
+
+.segment-nasal {
+  background-color: rgb(139 92 246 / 0.15);
+  color: rgb(221 214 254);
+  border: 1px solid rgb(167 139 250 / 0.3);
+}
+
+:root.light .segment-nasal {
+  background-color: rgb(237 233 254);
+  color: rgb(109 40 217);
+  border: 1px solid rgb(167 139 250 / 0.5);
+}
+
+.segment-voiced {
+  background-color: rgb(99 102 241 / 0.15);
+  color: rgb(199 210 254);
+  border: 1px solid rgb(129 140 248 / 0.3);
+}
+
+:root.light .segment-voiced {
+  background-color: rgb(224 231 255);
+  color: rgb(67 56 202);
+  border: 1px solid rgb(129 140 248 / 0.5);
+}
+
+.segment-voiceless {
+  background-color: rgb(14 165 233 / 0.15);
+  color: rgb(186 230 253);
+  border: 1px solid rgb(56 189 248 / 0.3);
+}
+
+:root.light .segment-voiceless {
+  background-color: rgb(224 242 254);
+  color: rgb(7 89 133);
+  border: 1px solid rgb(56 189 248 / 0.5);
+}
+
+.segment-glide {
+  background-color: rgb(20 184 166 / 0.15);
+  color: rgb(153 246 228);
+  border: 1px solid rgb(45 212 191 / 0.3);
+}
+
+:root.light .segment-glide {
+  background-color: rgb(204 251 241);
+  color: rgb(19 78 74);
+  border: 1px solid rgb(45 212 191 / 0.5);
+}
+
+.segment-silent {
+  background-color: rgb(51 65 85 / 0.4);
+  color: rgb(100 116 139);
+  border: 1px solid rgb(71 85 105 / 0.4);
+  text-decoration: line-through;
+}
+
+:root.light .segment-silent {
+  background-color: rgb(226 232 240);
+  color: rgb(148 163 184);
+  border: 1px solid rgb(203 213 225 / 0.5);
+  text-decoration: line-through;
 }

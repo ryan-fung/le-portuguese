@@ -8,33 +8,33 @@ import { PHONEME_IDS } from '@/core/phoneme-ids'
 import type { G2PSegment } from '@/core/types'
 
 export interface SegmentStyle {
-  /** Tailwind classes for the tile background + text. */
+  /** CSS class for the tile theme styling. */
   className: string
   label: string
 }
 
 const VOWEL = {
-  className: 'bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-400/30',
+  className: 'segment-vowel',
   label: 'Vowel',
 }
 const NASAL = {
-  className: 'bg-violet-500/15 text-violet-200 ring-1 ring-violet-400/30',
+  className: 'segment-nasal',
   label: 'Nasal vowel',
 }
 const VOICED = {
-  className: 'bg-indigo-500/15 text-indigo-200 ring-1 ring-indigo-400/30',
+  className: 'segment-voiced',
   label: 'Voiced consonant',
 }
 const VOICELESS = {
-  className: 'bg-sky-500/15 text-sky-200 ring-1 ring-sky-400/30',
+  className: 'segment-voiceless',
   label: 'Voiceless consonant',
 }
 const GLIDE = {
-  className: 'bg-teal-500/15 text-teal-200 ring-1 ring-teal-400/30',
+  className: 'segment-glide',
   label: 'Glide',
 }
 const SILENT = {
-  className: 'bg-slate-700/40 text-slate-500 line-through ring-1 ring-slate-600/40',
+  className: 'segment-silent',
   label: 'Silent',
 }
 

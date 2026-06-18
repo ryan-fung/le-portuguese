@@ -11,6 +11,7 @@ import { persist } from 'zustand/middleware'
 import { createEmptyCard, type Card } from 'ts-fsrs'
 
 export type RouteId = 'reader' | 'lab' | 'drills' | 'learn'
+export type Theme = 'dark' | 'light'
 
 export interface SrsCard {
   /** Composite id, e.g. 'phoneme:e-central' or 'drill:l-01'. */
@@ -22,6 +23,7 @@ export interface SrsCard {
 interface AppState {
   // --- UI prefs ---
   route: RouteId
+  theme: Theme
   showIpa: boolean
   showRespelling: boolean
   speechRate: number
@@ -39,6 +41,7 @@ interface AppState {
 
   // --- actions ---
   setRoute: (r: RouteId) => void
+  setTheme: (t: Theme) => void
   toggleIpa: () => void
   toggleRespelling: () => void
   setSpeechRate: (r: number) => void
@@ -55,6 +58,7 @@ export const useStore = create<AppState>()(
   persist(
     (set, get) => ({
       route: 'reader',
+      theme: 'dark',
       showIpa: true,
       showRespelling: true,
       speechRate: 0.85,
@@ -65,6 +69,7 @@ export const useStore = create<AppState>()(
       srs: {},
 
       setRoute: (route) => set({ route }),
+      setTheme: (theme) => set({ theme }),
       toggleIpa: () => set((s) => ({ showIpa: !s.showIpa })),
       toggleRespelling: () => set((s) => ({ showRespelling: !s.showRespelling })),
       setSpeechRate: (speechRate) => set({ speechRate }),
@@ -99,6 +104,7 @@ export const useStore = create<AppState>()(
     {
       name: 'le-portuguese-v1',
       partialize: (s) => ({
+        theme: s.theme,
         showIpa: s.showIpa,
         showRespelling: s.showRespelling,
         speechRate: s.speechRate,

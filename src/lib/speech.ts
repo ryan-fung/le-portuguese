@@ -1,17 +1,16 @@
 /**
- * European Portuguese text-to-speech via the Web Speech API.
+ * European Portuguese text-to-speech via Web Speech API.
  *
- * Browser support for a genuine pt-PT voice is uneven: desktop Safari/Chrome on
- * macOS ship "Joana"/"Catarina", but many Android and Windows devices only have
- * a pt-BR voice or none. We pick the best available pt-* voice, preferring
- * pt-PT, and expose whether a true EP voice was found so the UI can warn the
- * learner that the accent may sound Brazilian.
+ * Uses the browser's native pt-PT voice. On iOS/macOS, prompts users to download
+ * the high-quality Siri Portuguese (Portugal) voice if not detected.
  */
 
 export interface SpeechCapability {
   supported: boolean
-  /** True when an actual pt-PT voice is available (not just pt-BR fallback). */
+  /** True when Web Speech API has a genuine pt-PT voice. */
   hasEuropeanVoice: boolean
+  /** True when only low-quality or no pt-PT voice is available. */
+  shouldPromptVoiceDownload: boolean
   voiceName?: string
 }
 
@@ -45,16 +44,36 @@ function pickVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undef
   )
 }
 
+function isHighQualityVoice(voice: SpeechSynthesisVoice | undefined): boolean {
+  if (!voice) return false
+  const name = voice.name.toLowerCase()
+  // Check for premium/enhanced voices on iOS/macOS (e.g., "Joana", "Catarina" premium)
+  // and exclude low-quality compact voices
+  return (
+    !name.includes('compact') &&
+    (voice.localService || name.includes('premium') || name.includes('enhanced'))
+  )
+}
+
 export async function getSpeechCapability(): Promise<SpeechCapability> {
   if (typeof speechSynthesis === 'undefined') {
-    return { supported: false, hasEuropeanVoice: false }
+    return {
+      supported: false,
+      hasEuropeanVoice: false,
+      shouldPromptVoiceDownload: false
+    }
   }
+
   const voices = await loadVoices()
   const voice = pickVoice(voices)
+  const hasEPVoice = !!voice && voice.lang.toLowerCase() === 'pt-pt'
+  const isHighQuality = isHighQualityVoice(voice)
+
   return {
-    supported: true,
-    hasEuropeanVoice: !!voice && voice.lang.toLowerCase() === 'pt-pt',
-    voiceName: voice?.name,
+    supported: !!voice,
+    hasEuropeanVoice: hasEPVoice,
+    shouldPromptVoiceDownload: !hasEPVoice || !isHighQuality,
+    voiceName: voice?.name
   }
 }
 
@@ -62,22 +81,37 @@ export interface SpeakOptions {
   rate?: number
   pitch?: number
   onEnd?: () => void
+  onError?: (error: Error) => void
 }
 
-/** Speak a Portuguese word or passage. Cancels any in-flight utterance first. */
-export function speak(text: string, opts: SpeakOptions = {}): void {
+/** Speak a Portuguese word or passage using Web Speech API. */
+export async function speak(text: string, opts: SpeakOptions = {}): Promise<void> {
   if (typeof speechSynthesis === 'undefined') return
-  speechSynthesis.cancel()
+
+  // Stop any currently playing speech
+  stopSpeaking()
+
+  const voices = cachedVoices.length ? cachedVoices : await loadVoices()
+  const voice = pickVoice(voices)
+
   const utter = new SpeechSynthesisUtterance(text)
-  const voice = pickVoice(cachedVoices.length ? cachedVoices : speechSynthesis.getVoices())
   if (voice) utter.voice = voice
   utter.lang = voice?.lang ?? 'pt-PT'
   utter.rate = opts.rate ?? 0.85
   utter.pitch = opts.pitch ?? 1
+
   if (opts.onEnd) utter.addEventListener('end', opts.onEnd)
+  if (opts.onError) {
+    utter.addEventListener('error', (e) => {
+      opts.onError?.(new Error(`Speech synthesis error: ${e.error}`))
+    })
+  }
+
   speechSynthesis.speak(utter)
 }
 
 export function stopSpeaking(): void {
-  if (typeof speechSynthesis !== 'undefined') speechSynthesis.cancel()
+  if (typeof speechSynthesis !== 'undefined') {
+    speechSynthesis.cancel()
+  }
 }
