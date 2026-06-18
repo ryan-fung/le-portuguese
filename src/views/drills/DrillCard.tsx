@@ -75,12 +75,8 @@ function ChoiceCard({ entry, onGrade }: DrillCardProps) {
   const isSoundToSpell = drill.kind === 'sound-to-spell'
 
   // Auto-play the target word for listen-discriminate when the drill mounts.
+  // The parent now keys DrillCard by drill.id, so component remounts on drill change.
   const playedRef = useRef(false)
-  useEffect(() => {
-    playedRef.current = false
-    setPicked(null)
-  }, [drill.id])
-
   useEffect(() => {
     if (isListen && !playedRef.current) {
       playedRef.current = true
@@ -193,10 +189,7 @@ function ReadAloudCard({ entry, onGrade }: DrillCardProps) {
   const rate = useStore((s) => s.speechRate)
   const [revealed, setRevealed] = useState(false)
 
-  useEffect(() => {
-    setRevealed(false)
-  }, [drill.id])
-
+  // Parent keys this component by drill.id, so it remounts on drill change.
   useEffect(() => () => stopSpeaking(), [])
 
   const grades: { grade: Grade; label: string; hint: string; cls: string }[] = useMemo(

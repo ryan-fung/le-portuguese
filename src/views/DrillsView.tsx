@@ -95,7 +95,7 @@ export function DrillsView() {
             exit={{ opacity: 0, x: -24 }}
             transition={{ duration: 0.2 }}
           >
-            <DrillCard entry={current} onGrade={(grade, correct) => session.grade(grade, correct)} />
+            <DrillCard key={current.drill.id} entry={current} onGrade={(grade, correct) => session.grade(grade, correct)} />
           </motion.div>
         </AnimatePresence>
       </div>
