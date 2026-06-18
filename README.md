@@ -26,12 +26,45 @@ npm run build   # type-check and build to dist/
 npm run preview # serve the production build locally (port 4173)
 ```
 
+## How It Works
+
+### Audio Sourcing
+
+Lê uses two audio sources:
+
+1. **Bundled phoneme clips** (`/public/audio/<phoneme-id>.mp3`) — each of the 39 EP
+   phonemes has a short reference recording. The app plays these sequentially when no
+   pt-PT TTS voice is available.
+2. **Web Speech API (TTS)** — when the browser provides a `pt-PT` voice (like "Joana"
+   on macOS or "Catarina" on iOS), the app uses it to speak full words and sentences.
+   If only `pt-BR` is available, a warning appears since the accent differs.
+
+The G2P (grapheme-to-phoneme) engine lives in `src/core/g2p/` and models European
+Portuguese phonology: stress-conditioned vowel reduction (ɐ, ɨ, u), syllable-final
+sibilant shifts (s→ʃ), dark coda-l (ɫ), and the uvular/tap r distinction.
+
+### Known Limitations
+
+The G2P engine is rule-based and includes deliberate simplifications:
+
+- **Open vs close mid vowels** (ɛ/e, ɔ/o) are not predictable from unaccented spelling.
+  Stressed `e` and `o` default to the close values (`e`, `o`). Accent marks (`é`/`ê`,
+  `ó`/`ô`) resolve the ambiguity when present, but unaccented words like "seco" or
+  "novo" may be mispronounced without accent hints.
+- **The letter `x`** is read as `ʃ` by default, with a heuristic for `ex+vowel → [z]`.
+  The `[ks]` and `[s]` readings (as in "táxi" or "próximo") are not modelled.
+- **Rising diphthongs and hiatus** are simplified; see `src/core/g2p/syllabify.ts` for
+  details.
+
+For edge cases and regional variations, refer to the inline TODOs in
+`src/core/g2p/portuguese.ts`.
+
 ## Testing
 
 ```bash
 npm run typecheck   # tsc --noEmit
 npm run lint        # eslint
-npm run test        # Vitest unit tests
+npm run test        # Vitest unit tests (100 tests covering G2P, SRS, curriculum)
 npm run test:e2e    # Playwright e2e tests (builds + previews automatically)
 ```
 
